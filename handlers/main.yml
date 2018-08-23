@@ -1,0 +1,15 @@
+---
+# handlers file for multipath-iscsi
+#
+
+- name: restart multipathd
+  service:
+    name: multipathd
+    state: restarted
+
+- name: restart iscsid
+  service:
+    name: iscsid
+    state: restarted
+
+

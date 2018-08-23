@@ -1,0 +1,62 @@
+---
+# tasks file for multipath-iscsi
+
+- name: Install required packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - iscsi-initiator-utils
+    - device-mapper-multipath
+    - lsof
+
+- name: "Add multipath config"
+  template:
+    src: multipath.conf.j2
+    dest: /etc/multipath.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart multipathd
+
+- name: Loading multipath Kernel Module
+  modprobe:
+    name: dm-multipath
+    state: present
+
+- name: Configuring initiator.iscsi
+  template:
+    src: "initiatorname.iscsi.j2"
+    dest: /etc/iscsi/initiatorname.iscsi
+    mode: 0644
+    owner: root
+    group: root
+  notify: restart iscsid
+
+#- name: " Setup | Configuring iscsid "
+#  blockinfile:
+#   path: /etc/iscsi/iscsid.conf
+#   state: present
+#    marker: "# {mark} === ANSIBLE MANAGED BLOCK ==="
+#    insertafter: "# CHAP Settings"
+#    content: |
+#      node.session.auth.authmethod = CHAP
+#      node.session.auth.username = {{ item.login }}
+#      node.session.auth.password = {{ item.pass }}
+#      discovery.sendtargets.auth.authmethod = CHAP
+#      discovery.sendtargets.auth.username = {{ item.login }}
+#      discovery.sendtargets.auth.password = {{ item.pass }}
+#  with_items: "{{ credentials }}"
+
+# test commands iscsiadm
+#- import_tasks: iscsiadm.yml
+
+- name: Ensure services
+  service:
+    name: '{{ item }}'
+    state: started
+    enabled: true
+  with_items:
+    - multipathd
+    - iscsid
+

@@ -1,0 +1,5 @@
+---
+# defaults file for multipath-iscsi
+
+multipath_iscsi_role_git_repo: https://github.com/SecurityShift/ansible-role-multipath-iscsi
+multipath_iscsi_vdsm: False

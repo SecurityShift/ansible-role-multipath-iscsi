@@ -1,0 +1,46 @@
+{% if multipath_iscsi_vdsm %}
+# VDSM REVISION 1.4
+# VDSM PRIVATE
+{% endif %}
+# {{ ansible_managed }}
+# See {{ multipath_iscsi_role_git_repo }}/blob/master/templates/multipathd.conf.j2
+
+defaults {
+        user_friendly_names no
+        find_multipaths     no
+        polling_interval    5
+        flush_on_last_del   yes
+        max_fds             4096
+}
+blacklist {
+       devnode "^(ram|raw|loop|fd|md|dm-|sr|scd|st)[0-9]*"
+       devnode "^hd[a-z]"
+       device {
+               vendor ".*"
+               product ".*"
+       }
+}
+blacklist_exceptions {
+        device {
+               vendor "Nimble"
+               product "Server"
+        }
+}
+devices {
+        device {
+                vendor "Nimble"
+                product "Server"
+                path_grouping_policy group_by_prio
+                prio "alua"
+                hardware_handler "1 alua"
+                path_selector "service-time 0"
+                path_checker tur
+                features "1 queue_if_no_path"
+                no_path_retry 30
+                failback immediate
+                dev_loss_tmo  infinity
+                fast_io_fail_tmo 5
+                rr_weight uniform
+                rr_min_io_rq 1
+        }
+}
