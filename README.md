@@ -1,7 +1,7 @@
-Role Name
-=========
+multipath-iscsi
+===============
 
-A brief description of the role goes here.
+Configure multipath and iscsi for mount volumes
 
 Requirements
 ------------
@@ -35,4 +35,4 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Ben O'Hara <ben@securityshift.com>

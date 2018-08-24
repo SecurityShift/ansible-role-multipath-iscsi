@@ -9,6 +9,8 @@
     - iscsi-initiator-utils
     - device-mapper-multipath
     - lsof
+  tags:
+    - install
 
 - name: "Add multipath config"
   template:
@@ -18,11 +20,27 @@
     group: root
     mode: 0644
   notify: restart multipathd
+  tags:
+    - config
+
 
 - name: Loading multipath Kernel Module
   modprobe:
     name: dm-multipath
     state: present
+  tags:
+    - install
+
+- name: "Add iscsid config"
+  template:
+    src: iscsid.conf.j2
+    dest: /etc/iscsi/iscsid.conf
+    owner: root
+    group: root
+    mode: 0600
+  notify: restart iscsid
+  tags:
+    - config
 
 - name: Configuring initiator.iscsi
   template:
@@ -32,24 +50,8 @@
     owner: root
     group: root
   notify: restart iscsid
-
-#- name: " Setup | Configuring iscsid "
-#  blockinfile:
-#   path: /etc/iscsi/iscsid.conf
-#   state: present
-#    marker: "# {mark} === ANSIBLE MANAGED BLOCK ==="
-#    insertafter: "# CHAP Settings"
-#    content: |
-#      node.session.auth.authmethod = CHAP
-#      node.session.auth.username = {{ item.login }}
-#      node.session.auth.password = {{ item.pass }}
-#      discovery.sendtargets.auth.authmethod = CHAP
-#      discovery.sendtargets.auth.username = {{ item.login }}
-#      discovery.sendtargets.auth.password = {{ item.pass }}
-#  with_items: "{{ credentials }}"
-
-# test commands iscsiadm
-#- import_tasks: iscsiadm.yml
+  tags:
+    - config
 
 - name: Ensure services
   service:

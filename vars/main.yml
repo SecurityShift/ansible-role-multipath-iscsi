@@ -1,5 +1,3 @@
 ---
 # vars file for multipath-iscsi
 
-filebindings: "/etc/multipath/bindings"
-devmap: "/dev/mapper"

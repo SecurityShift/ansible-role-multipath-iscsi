@@ -1,15 +1,16 @@
 ---
 # handlers file for multipath-iscsi
-#
 
 - name: restart multipathd
   service:
     name: multipathd
     state: restarted
+  when: no_restart is not defined and not no_restart
 
 - name: restart iscsid
   service:
     name: iscsid
     state: restarted
+  when: no_restart is not defined and not no_restart
 
 
