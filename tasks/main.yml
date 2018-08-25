@@ -62,3 +62,39 @@
     - multipathd
     - iscsid
 
+- name: copy check_multipath
+  copy:
+    src: check_multipath
+    dest: /usr/lib64/nagios/plugins/check_multipath
+    owner: root
+    group: root
+    mode: 0755
+  tags:
+    - nrpe
+    - plugin
+    - install
+
+- name: copy nrpe check definition
+  template:
+    src: check_multipath.cfg.j2
+    dest: /etc/nrpe.d/check_multipath.cfg
+    owner: nrpe
+    group: nrpe
+    mode: 0644
+  notify: restart nrpe
+  tags:
+    - nrpe
+    - config
+    - plugin
+
+- name: Allow nrpe to sudo multipath
+  template:
+    src: 50-nrpe-check-multipath.j2
+    dest: /etc/sudoers.d/50-nrpe-check-multipath
+    owner: root
+    group: root
+    mode: 0640
+    validate: '/usr/sbin/visudo -cf %s'
+  tags:
+    - nrpe
+    - sudo
