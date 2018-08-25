@@ -1,5 +1,5 @@
 # {{ ansible_managed }}
 # See {{ multipath_iscsi_role_git_repo }}/blob/master/templates/check_multipath.cfg.j2
 
-command[check_multipath]=/usr/lib64/nagios/plugins/check_multipath -s -o $ARG1$ -m $ARG2$
+command[check_multipath]=/usr/lib64/nagios/plugins/check_multipath -s -n ok -o $ARG1$ -m $ARG2$
 
