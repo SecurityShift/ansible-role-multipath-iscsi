@@ -1,3 +1,4 @@
+#!/bin/env perl
 # Ansible Managed - DO NOT EDIT!
 # See http://github.com/SecurityShift/ansible-role-multipath-iscsi/blob/master/files/check_multipath
 
