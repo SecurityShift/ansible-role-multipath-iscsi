@@ -3,3 +3,9 @@
 
 multipath_iscsi_role_git_repo: https://github.com/SecurityShift/ansible-role-multipath-iscsi
 multipath_iscsi_vdsm: False
+
+multipath_iscsi_packages:
+  - iscsi-initiator-utils
+  - device-mapper-multipath
+  - lsof
+
